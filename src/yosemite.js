@@ -15,7 +15,7 @@ L.svg().addTo(mymap);
 
 function svgCords(cords = mymap.getCenter()) {
   d3.json(
-    `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=500&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
+    // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=500&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
     function (data) {
       let color = d3
         .scaleOrdinal()
@@ -44,6 +44,8 @@ function svgCords(cords = mymap.getCenter()) {
     }
   );
 }
+
+// function svgCords(cords)
 
 //update map on move
 function update() {
