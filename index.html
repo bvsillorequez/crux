@@ -7,13 +7,93 @@
   <script src="https://d3js.org/d3.v4.js"></script>
   <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mappa-mundi/dist/mappa.js" type="text/javascript"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/mappa-mundi/dist/mappa.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script> -->
   <!-- <svg id="my_dataviz" width="95vw" height="95vh"></svg> -->
   <!-- <canvas id="my_dataviz" width="1100" height="800"></canvas> -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+    integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+    crossorigin=""></script>
 </head>
 <body>
+
+  <div id="mapid"></div>
+  <style>
+    #mapid { height: 800px; width: 800px;}
+  </style>
+
   <script>
+    var mymap = L
+        .map('mapid')
+        .setView([37.840548, -119.5165878], 10);
+
+        L.tileLayer(
+          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+          maxZoom: 16,
+        }).addTo(mymap);
+
+    L.svg().addTo(mymap);
+
+    // let markers = [
+    //   { long: -119.3992, lat: 37.8186 }
+    // ]
+
+    d3.json("https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=37.840548&lon=-119.5165878&maxDistance=10&maxResults=500&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af", function(routes){
+      // debugger
+      routes.routes.forEach(function(d) {
+        // debugger
+        d.LatLng = new L.LatLng(d.latitude, d.longitude)
+      })
+      // debugger
+      d3.select("#mapid")
+        .select("svg")
+        .selectAll("circles")
+        .data(routes.routes)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){ return mymap.latLngToLayerPoint([d.latitude,d.longitude]).x})
+        .attr("cy", function(d){ return mymap.latLngToLayerPoint([d.latitude,d.longitude]).y})
+        .attr("r", 14)
+        .style("fill", "red")
+        .attr("stroke", "red")
+        .attr("stroke-width", 3)
+        .attr("fill-opacity", .4)
+    })
+
+    function update() {
+        d3.selectAll("circle")
+          .attr("cx", function (d) { return mymap.latLngToLayerPoint([d.latitude, d.longitude]).x })
+          .attr("cy", function (d) { return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y })
+      }
+
+    mymap.on("moveend", update)
+
+
+    d3.json("https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=37.840548&lon=-119.5165878&maxDistance=10&maxResults=500&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af", function(data) {
+      let canvas = d3.select("mapid")
+        .append("svg")
+        .attr("width", 50)
+        .attr("height", 50)
+
+        canvas
+          .selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx", function(d){return d.latitude})
+          .attr("cy", function(d){return d.longitude})
+          .attr("r", 7)
+        
+    })
+  </script>
+
+
+  )
+  <!-- <script>
     let myMap;
 
     let canvas;
@@ -42,252 +122,8 @@
     //   const valley = myMap.latLngToPixel(37.840548, -119.5165878)
     //   ellipse(valley.x, valley.y, 20, 20)
     // }
-  </script>
-
-  <!-- <script>
-
-    // select the canvas element created in the html.
-    var canvas = document.getElementById('my_dataviz');
-
-    // Actual width and height. No idea if clienWidth would be a better option..?
-    var width = canvas.offsetWidth
-    var height = canvas.offsetHeight
-
-    // Set a projection for the map. Projection = transform a lat/long on a position on the 2d map.
-    var projection = d3.geoNaturalEarth()
-      .scale(width / 1.3 / Math.PI)
-      .translate([width / 2, height / 2])
-
-    // Get the 'context'
-    var ctx = canvas.getContext('2d');
-
-    // geographic path generator for given projection and canvas context
-    const pathGenerator = d3.geoPath(projection, ctx);
-
-    // Draw a background
-    ctx.fillStyle = '#ddd';
-    ctx.fillRect(0, 0, width, height);
-
-    // Load external data and boot
-    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", function (data) {
-
-      // initialize the path
-      ctx.beginPath();
-      debugger
-      // Got the positions of the path
-      pathGenerator(data.features[167]);
-
-      // Fill the paths
-      ctx.fillStyle = "#999";
-      ctx.fill();
-
-      // Add stroke
-      ctx.strokeStyle = "#69b3a2";
-      ctx.stroke()
-
-    })
-
   </script> -->
 
   
-  <!-- <div id="Area"></div> -->
-  
-  
-  <!-- <script>
-
-    // The svg
-    var svg = d3.select("svg"),
-      width = +svg.attr("width"),
-      height = +svg.attr("height");
-
-    // Map and projection
-    var projection = d3.geoMercator()
-      .center([37.840548, -119.5165878])                // GPS of location to zoom on //Yosemite
-      .scale(980)                       // This is like the zoom
-      .translate([width / 2, height / 2])
-
-    // Load external data and boot
-    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", function (data) {
-
-      // Filter data
-      data.features = data.features.filter(function (d) { console.log(d.properties.name); return d.properties.name == "USA" })
-      debugger
-      // Draw the map
-      svg.append("g")
-        .selectAll("path")
-        .data(data.features)
-        .enter()
-        .append("path")
-        .attr("fill", "grey")
-        .attr("d", d3.geoPath()
-          .projection(projection)
-        )
-        .style("stroke", "none")
-    })
-
-  </script> -->
-
-  <!-- Create a shape -->
-  <!-- <svg>
-    <circle class="target" style="fill: #69b3a2" stroke="black" cx=50 cy=50 r=40></circle>
-  </svg> -->
-
-  <!-- Position shape -->
-  <!-- <script>
-    var svg = d3.select("#my_dataviz")
-    svg.append("circle")
-      .attr("cx", 2)
-      .attr("cy", 400)
-      .attr("r", 40)
-      .style("fill", "blue");
-    svg.append("circle")
-      .attr("cx", 140)
-      .attr("cy", 70)
-      .attr("r", 40)
-      .style("fill", "red");
-    svg.append("circle")
-      .attr("cx", 300)
-      .attr("cy", 100)
-      .attr("r", 40)
-      .style("fill", "green");
-  </script> -->
-
-  <!-- Style shape -->
-  <!-- <script>
-    d3
-      .select(".target")  // select the elements that have the class 'target'
-      .style("stroke-width", 8) // change their style: stroke width is not equal to 8 pixels
-      .style("opacity", 0.5)
-  </script> -->
-
-  <!-- Move objects in x and y direction -->
-  <!-- <script>
-    // Select the svg area
-    var svg = d3.select("#my_dataviz")
-
-    // Create a scale: transform value in pixel
-    var x = d3.scaleLinear()
-      .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-      .range([0, 1600]);       // This is the corresponding value I want in Pixel
-    // Try console.log( x(25) ) to see what this x function does.
-    var y = d3.scaleLinear()
-      .domain([0, 100])
-      .range([0, 600]);
-
-    // Add 3 dots for 0, 50 and 100%
-    svg.append("circle")
-      .attr("cx", x(0)).attr("cy", 600).attr("r", 40).style("fill", "blue");
-    svg.append("circle")
-      .attr("cx", x(50)).attr("cy", 100).attr("r", 40).style("fill", "red");
-    svg.append("circle")
-      .attr("cx", x(100)).attr("cy", 100).attr("r", 40).style("fill", "green");
-  </script> -->
-
-
-  <!-- <script>
-    // Select the svg area
-    var svg = d3.select("#my_dataviz")
-
-    // Create a scale: transform value in pixel
-    var x = d3.scaleLinear()
-      .domain([15, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-      .range([400, 1600]);       // This is the corresponding value I want in Pixel
-
-    // Show the axis that corresponds to this scale
-    svg.call(d3.axisBottom(x));
-
-    // Add 3 dots for 0, 50 and 100%
-    svg.append("circle")
-      .attr("cx", x(10)).attr("cy", 100).attr("r", 40).style("fill", "blue");
-    svg.append("circle")
-      .attr("cx", x(50)).attr("cy", 100).attr("r", 40).style("fill", "red");
-    svg.append("circle")
-      .attr("cx", x(100)).attr("cy", 100).attr("r", 40).style("fill", "green");
-  </script> -->
-
-  <!-- <script>
-
-    // set the dimensions and margins of the graph
-    var margin = { top: 70, right: 60, bottom: 60, left: 60 },
-      width = 450 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
-
-    // append the svg object to the body of the page
-    var sVg = d3.select("#Area")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      // translate this svg element to leave some margin.
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    // X scale and Axis
-    var x = d3.scaleLinear()
-      .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-      .range([0, width]);       // This is the corresponding value I want in Pixel
-    sVg
-      .append('g')
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-    // X scale and Axis
-    var y = d3.scaleLinear()
-      .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-      .range([height, 0]);       // This is the corresponding value I want in Pixel
-    sVg
-      .append('g')
-      .call(d3.axisLeft(y));
-
-  </script> -->
-  <!-- <div id="scatter_area"></div>
-
-  <script>
-
-    // set the dimensions and margins of the graph
-    var margin = { top: 10, right: 40, bottom: 30, left: 30 },
-      width = 450 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
-
-    // append the svg object to the body of the page
-    var svG = d3.select("#scatter_area")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-
-    // Create data
-    var data = [{ x: 10, y: 20 }, { x: 40, y: 90 }, { x: 80, y: 50 }]
-
-    // X scale and Axis
-    var x = d3.scaleLinear()
-      .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-      .range([0, width]);       // This is the corresponding value I want in Pixel
-    svG
-      .append('g')
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-    // X scale and Axis
-    var y = d3.scaleLinear()
-      .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-      .range([height, 0]);       // This is the corresponding value I want in Pixel
-    svG
-      .append('g')
-      .call(d3.axisLeft(y));
-
-    // Add 3 dots for 0, 50 and 100%
-    svG
-      .selectAll("whatever")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("cx", function (d) { return x(d.x) })
-      .attr("cy", function (d) { return y(d.y) })
-      .attr("r", 7)
-
-
-  </script> -->
 </body>
 </html>
