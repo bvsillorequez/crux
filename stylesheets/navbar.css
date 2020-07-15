@@ -4,6 +4,7 @@
   bottom: 0;
   width: 100%;
   background-color:#a3a199;
+  z-index: 500;
 }
 
 .footer-container {

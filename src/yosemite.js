@@ -10,19 +10,21 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(mymap);
 
 //Add svg with data
-L.svg().addTo(mymap);
+L.svg({clickable:true}).addTo(mymap);
 
 
 function svgCords(cords = mymap.getCenter()) {
   d3.json(
-    // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=500&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
+    // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`
+    "src/yosemite.json",
     function (data) {
       let color = d3
         .scaleOrdinal()
         .domain(["Trad", "Sport", "Boulder"])
         .range(["#29526D", "#AA8C39", "#551600"]); //blue trad, yellow sport, red boulder
-  
-      d3.select("#mapid")
+      
+
+      let selection = d3.select("#mapid")
         .select("svg")
         .selectAll("circles")
         .data(data.routes)
@@ -45,8 +47,6 @@ function svgCords(cords = mymap.getCenter()) {
   );
 }
 
-// function svgCords(cords)
-
 //update map on move
 function update() {
   d3.selectAll("circle")
@@ -56,6 +56,7 @@ function update() {
     .attr("cy", function (d) {
       return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y;
     });
+  d3.selectAll('circle').data([]).exit().remove()
   changeCords()
 }
 
@@ -65,5 +66,5 @@ function changeCords() {
 }
 
 
-svgCords()
 mymap.on("moveend", update);
+svgCords()
