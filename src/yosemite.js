@@ -1,5 +1,5 @@
 //Location On Map
-var mymap = L.map("mapid").setView([37.840548, -119.5165878], 10);
+var mymap = L.map("mapid").setView([37.840548, -119.5165878], 11);
 
 
 //Map
@@ -7,10 +7,11 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution:
     'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
   maxZoom: 16,
+  minZoom: 10,
 }).addTo(mymap);
 
 //Add svg with data
-L.svg({clickable:true}).addTo(mymap);
+L.svg({clickable: true}).addTo(mymap);
 
 
 function svgCords(cords = mymap.getCenter()) {
@@ -22,27 +23,38 @@ function svgCords(cords = mymap.getCenter()) {
         .scaleOrdinal()
         .domain(["Trad", "Sport", "Boulder"])
         .range(["#29526D", "#AA8C39", "#551600"]); //blue trad, yellow sport, red boulder
-      
 
-      let selection = d3.select("#mapid")
+      let onClick = function (d) {
+        d3.select("circle").attr("fill", "red")
+      }
+
+
+      let routes = d3.select("#mapid")
         .select("svg")
+        .attr("pointer-events", "auto")
         .selectAll("circles")
         .data(data.routes)
         .enter()
         .append("circle")
-        .attr("cx", function (d) {
-          return mymap.latLngToLayerPoint([d.latitude, d.longitude]).x;
+          .attr("class", "datapoint")
+          .attr("cx", function (d) {
+            return mymap.latLngToLayerPoint([d.latitude, d.longitude]).x;
+          })
+          .attr("cy", function (d) {
+            return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y;
+          })
+          .attr("r", 10)
+          .style("fill", function (d) {
+            return color(d.type);
+          })
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)
+          .attr("fill-opacity", 0.2)
+          .attr("z-index", 10000)
+        .on("click", function (d) {
+          console.log("Clicked")
+          // d3.select(this).attr("fill", "red")
         })
-        .attr("cy", function (d) {
-          return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y;
-        })
-        .attr("r", 10)
-        .style("fill", function (d) {
-          return color(d.type);
-        })
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
-        .attr("fill-opacity", 0.2)
     }
   );
 }

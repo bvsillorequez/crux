@@ -1195,3 +1195,9 @@ imgMedium: "https://cdn2.apstatic.com/photos/climb/114419608_medium_1527560466.j
 longitude: -119.619,
 latitude: 37.7306
 }
+
+
+1.  Trying to get an event listener for onClick on an svg point on a map but its not working
+2.  I tried to add a .on("click", onClick()) ceating a onclick function
+    I tried putting the fuction in the parens, I tried creating a L.DomEvent for the svg on the
+    map.  I tried also with mouse events but I got nowhere

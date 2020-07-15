@@ -1,5 +1,27 @@
-.mapid{
+#mapid{
   display: flex;
   justify-items: center;
   align-items: flex-start;
+  z-index: -1;
 }
+
+/* .leaflet-overlay-pane svg path{   
+  pointer-events: auto;
+} */
+
+.datapoint{
+  z-index: 1000;
+}
+/* 
+.tooltip {
+  z-index: 1001;
+} */
+
+.leftlet-map-pane svg path{
+  /* z-index: -1; */
+  pointer-events: auto;
+}
+
+/* .leftlet-control-container{
+  z-index: -1;
+} */
