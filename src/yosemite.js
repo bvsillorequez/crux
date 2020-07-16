@@ -1,4 +1,5 @@
 //Location On Map
+//Create a Dynamic Drop Down list of National Parks
 var mymap = L.map("mapid").setView([37.840548, -119.5165878], 10);
 
 
@@ -13,8 +14,8 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 //Add svg with data
 L.svg({clickable: true}).addTo(mymap);
 
-// var popup = L.popup()
-var circle
+
+
 function svgCords(cords = mymap.getCenter()) {
   d3.json(
     // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
@@ -47,14 +48,14 @@ function svgCords(cords = mymap.getCenter()) {
 
       
       var onClick = function(d) {
-        circle = L.circle([d.latitude, d.longitude], 40, {
-          color: 'white',
+        var circle = L.circle([d.latitude, d.longitude], 40, {
+          color: 'none',
           fillColor: 'white',
-          fillOpacity: 0.1
+          fillOpacity: 0
         }).addTo(mymap);
 
         circle.bindPopup(d.name + 
-          "  ||  Type: " + d.type + "  ||  Grade: " + d.rating).openPopup();
+          "  ||  Type: " + d.type + "  ||  Grade: " + d.rating);
       }
 
       d3.select("#mapid")

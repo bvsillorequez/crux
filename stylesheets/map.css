@@ -5,6 +5,9 @@
   z-index: -1;
 }
 
+.leftlet-map-pane svg path{
+  pointer-events: auto;
+}
 /* .leaflet-overlay-pane svg path{   
   pointer-events: auto;
 } */
@@ -21,10 +24,6 @@
   font-size: 500px;
 } */
 
-.leftlet-map-pane svg path{
-  /* z-index: -1; */
-  pointer-events: auto;
-}
 
 /* .leftlet-control-container{
   z-index: -1;
@@ -34,7 +33,7 @@
   z-index: 1002;
 } */
 
-.modal {
+/* .modal {
     position: fixed;
     left: 0;
     top: 0;
@@ -73,4 +72,4 @@
     visibility: visible;
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-}
+} */
