@@ -19,19 +19,25 @@ let onChange = function() {
 } 
 
 
-let dropdown = document.querySelector('.dropdown')
-let select = document.createElement('select')
-select.id = "drop-down"
-select.addEventListener("change", onChange);
-dropdown.appendChild(select)
+
+
+let npdropdown = document.querySelector('.dropdown')
+let npselect = document.createElement('select')
+npselect.id = "drop-down"
+npselect.addEventListener("change", onChange);
+npdropdown.appendChild(npselect)
 
 
 for(const [park, cords] of Object.entries(parks)){
   let option = document.createElement('option')
   option.value = cords
   option.innerHTML = park
-  select.appendChild(option)
+  npselect.appendChild(option)
 }
+
+
+
+
 
 var mymap = L.map("mapid").setView([37.840548, -119.5165878], 10);
 
@@ -49,6 +55,7 @@ L.svg({ clickable: true }).addTo(mymap);
 
 
 function svgCords(cords = mymap.getCenter()) {
+  
   d3.json(
     // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
     "src/yosemite.json",
@@ -79,8 +86,8 @@ function svgCords(cords = mymap.getCenter()) {
       // }
 
 
-      var onClick = function (d) {
-        var circle = L.circle([d.latitude, d.longitude], 40, {
+      let onClick = function (d) {
+        let circle = L.circle([d.latitude, d.longitude], 40, {
           color: 'none',
           fillColor: 'white',
           fillOpacity: 0
@@ -89,6 +96,41 @@ function svgCords(cords = mymap.getCenter()) {
         circle.bindPopup(d.name +
           "  ||  Type: " + d.type + "  ||  Grade: " + d.rating);
       }
+
+      let onTypeChange = function () {
+        let e = document.getElementById("type");
+        let dicipline = e.options[e.selectedIndex].value;
+        console.log(`${dicipline}`)
+        render(dicipline)
+      };
+
+      let dpdropdown = document.querySelector(".dropdown");
+      let dpselect = document.createElement("select");
+        dpselect.id = "type";
+        dpselect.addEventListener("change", onTypeChange);
+        dpdropdown.appendChild(dpselect);
+
+      let dpoption = document.createElement("option");
+        dpoption.innerHTML = "Dicipline";
+        dpoption.value = "null";
+        dpselect.appendChild(dpoption);
+
+      let diciplineArray = ["Trad"]
+      data.routes.forEach(route => {
+        if (!diciplineArray.includes(route.type)){
+          diciplineArray.push(route.type)
+        }
+      })
+
+      d3.select("#type")
+        .selectAll('typeOptions')
+        .data(diciplineArray)
+        .enter()
+        .append('option')
+        .text(function (d){
+            return d 
+        })
+        .attr("value", function (d){return d})
 
       d3.select("#mapid")
         .select("svg")
