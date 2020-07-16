@@ -3,25 +3,27 @@ let parks = {
   Yosemite: [37.840548, -119.5165878, 10],
   RedRock: [36.144252016957466, -115.4502512631274, 14],
   Zion: [37.26246914115453, -112.9923491146186, 12],
+  Tonsai: [8.01, 98.833, 16]
 };
 
 var c
 let onChange = function() {
   let e = document.getElementById("drop-down")
   let cord = e.options[e.selectedIndex].value
+
   if (!cord) return;
+
   let array = cord.split(",")
   c = ({lat: Number(array[0]), lng: Number(array[1]), zoom: Number(array[2])})
-  // mymap.panTo(new L.LatLng(c.lat, c.lng))
   mymap.setView([c.lat, c.lng], c.zoom);
 } 
 
 
-let dropup = document.querySelector('.dropdown')
+let dropdown = document.querySelector('.dropdown')
 let select = document.createElement('select')
 select.id = "drop-down"
 select.addEventListener("change", onChange);
-dropup.appendChild(select)
+dropdown.appendChild(select)
 
 
 for(const [park, cords] of Object.entries(parks)){
@@ -31,21 +33,13 @@ for(const [park, cords] of Object.entries(parks)){
   select.appendChild(option)
 }
 
-
-//Location On Map
-//Create a Dynamic Drop Down list of National Parks
 var mymap = L.map("mapid").setView([37.840548, -119.5165878], 10);
-// } else {
-//   debugger
-//   var mymap = L.map("mapid").setView([cords.lat, cords.lng], 10);
-// }
-
 
 //Map
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution:
     'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-  maxZoom: 16,
+  maxZoom: 18,
   minZoom: 10,
 }).addTo(mymap);
 
@@ -57,7 +51,7 @@ L.svg({ clickable: true }).addTo(mymap);
 function svgCords(cords = mymap.getCenter()) {
   d3.json(
     // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
-    // "src/yosemite.json",
+    "src/yosemite.json",
     function (data) {
       let color = d3
         .scaleOrdinal()
