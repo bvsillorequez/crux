@@ -1,6 +1,6 @@
 # Crux
 
-![crux.gif](https://s7.gifyu.com/images/crux.gif)
+![ezgif.com-video-to-gif-11a9288473eff29e7.gif](https://s7.gifyu.com/images/ezgif.com-video-to-gif-11a9288473eff29e7.gif)
 
 ## Live Site
 
