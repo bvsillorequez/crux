@@ -40,20 +40,19 @@ function svgCords(cords = mymap.getCenter()) {
         let e = document.getElementById("type");
         let dicipline = e.options[e.selectedIndex].value;
         var elements = document.getElementsByTagName('select');
-        render(dicipline)
+        renderType(dicipline)
       };
 
       let onGradeChange = function () {
         let e = document.getElementById("grade");
         let grade = e.options[e.selectedIndex].value;
-        console.log(`${grade}`)
         renderGrade(grade)
       };
 
       document.querySelector("#type").addEventListener("change", onTypeChange);
       document.querySelector("#grade").addEventListener("change", onGradeChange);
 
-      function render(dicipline) {
+      function renderType(dicipline) {
         d3.selectAll("circle").data([]).exit().remove();
         const update = d3.select("#mapid")
           .select("svg")
