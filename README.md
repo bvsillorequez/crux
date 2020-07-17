@@ -19,6 +19,9 @@ select the location they want to climb in and upon zooming in, the user can find
 what climbs are in that area along with information on the climb, clicking the 
 marker.
 
+**NB:** MountainProjectAPI was set to reveal 50 climbs at a time to control the 
+amount of GET request API calls to their server.
+
 ![cruxclick](https://s7.gifyu.com/images/ezgif.com-video-to-gif7d1b37388683b5a6.gif)
 
 ## Technologies Used
