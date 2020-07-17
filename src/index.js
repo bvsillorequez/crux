@@ -1,44 +1,3 @@
-let parks = {
-  NationalParks: null,
-  Yosemite: [37.840548, -119.5165878, 10],
-  RedRock: [36.144252016957466, -115.4502512631274, 14],
-  Zion: [37.26246914115453, -112.9923491146186, 12],
-  Tonsai: [8.01, 98.833, 16]
-};
-
-var c
-let onChange = function() {
-  let e = document.getElementById("drop-down")
-  let cord = e.options[e.selectedIndex].value
-
-  if (!cord) return;
-
-  let array = cord.split(",")
-  c = ({lat: Number(array[0]), lng: Number(array[1]), zoom: Number(array[2])})
-  mymap.setView([c.lat, c.lng], c.zoom);
-} 
-
-
-
-
-let npdropdown = document.querySelector('.dropdown')
-let npselect = document.createElement('select')
-npselect.id = "drop-down"
-npselect.addEventListener("change", onChange);
-npdropdown.appendChild(npselect)
-
-
-for(const [park, cords] of Object.entries(parks)){
-  let option = document.createElement('option')
-  option.value = cords
-  option.innerHTML = park
-  npselect.appendChild(option)
-}
-
-
-
-
-
 var mymap = L.map("mapid").setView([37.840548, -119.5165878], 10);
 
 //Map
@@ -65,26 +24,6 @@ function svgCords(cords = mymap.getCenter()) {
         .domain(["Trad", "Sport", "Boulder"])
         .range(["#29526D", "#AA8C39", "#551600"]); //blue trad, yellow sport, red boulder
 
-      // var Tooltip = d3.select(".datapoint")
-      //   .append("div")
-      //   .attr("class", "route-info")
-      //   .style("opacity", 1)
-      //   .style("background-color", "white")
-      //   .style("border", "solid")
-      //   .style("border-width", "2px")
-      //   .style("border-radius", "5px")
-      //   .style("padding", "5px")
-
-      // var modal = document.querySelector(".modal");
-      // var onClick = function(d) {
-      //   modal.classList.toggle("show-modal");
-
-
-      //   document.querySelector(".route-name").innerHTML = d.name //this works
-      //   document.querySelector(".route-type").innerHTML = d.type
-      //   document.querySelector(".route-grade").innerHTML = d.rating
-      // }
-
 
       let onClick = function (d) {
         let circle = L.circle([d.latitude, d.longitude], 40, {
@@ -100,37 +39,80 @@ function svgCords(cords = mymap.getCenter()) {
       let onTypeChange = function () {
         let e = document.getElementById("type");
         let dicipline = e.options[e.selectedIndex].value;
-        console.log(`${dicipline}`)
         render(dicipline)
       };
 
-      let dpdropdown = document.querySelector(".dropdown");
-      let dpselect = document.createElement("select");
-        dpselect.id = "type";
-        dpselect.addEventListener("change", onTypeChange);
-        dpdropdown.appendChild(dpselect);
+      let onGradeChange = function () {
+        let e = document.getElementById("grade");
+        let grade = e.options[e.selectedIndex].value;
+        console.log(`${grade}`)
+        renderGrade(grade)
+      };
 
-      let dpoption = document.createElement("option");
-        dpoption.innerHTML = "Dicipline";
-        dpoption.value = "null";
-        dpselect.appendChild(dpoption);
+      document.querySelector("#type").addEventListener("change", onTypeChange);
+      document.querySelector("#grade").addEventListener("change", onGradeChange);
 
-      let diciplineArray = ["Trad"]
-      data.routes.forEach(route => {
-        if (!diciplineArray.includes(route.type)){
-          diciplineArray.push(route.type)
-        }
-      })
+      function render(dicipline) {
+        d3.selectAll("circle").data([]).exit().remove();
+        const update = d3.select("#mapid")
+          .select("svg")
+          .attr("pointer-events", "auto")
+          .selectAll("circles")
+          .data(data.routes.filter(d => d.type === dicipline))
 
-      d3.select("#type")
-        .selectAll('typeOptions')
-        .data(diciplineArray)
-        .enter()
-        .append('option')
-        .text(function (d){
-            return d 
-        })
-        .attr("value", function (d){return d})
+        update.exit().remove()
+
+        update
+          .enter()
+          .append("circle")
+          .attr("class", "datapoint")
+          .attr("cx", function (d) {
+            return mymap.latLngToLayerPoint([d.latitude, d.longitude]).x;
+          })
+          .attr("cy", function (d) {
+            return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y;
+          })
+          .attr("r", 10)
+          .style("fill", function (d) {
+            return color(d.type);
+          })
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)
+          .attr("fill-opacity", 0.2)
+          .on("click", onClick);
+      }
+
+      
+      function renderGrade(grade) {
+        d3.selectAll("circle").data([]).exit().remove();
+        const update = d3.select("#mapid")
+          .select("svg")
+          .attr("pointer-events", "auto")
+          .selectAll("circles")
+          .data(data.routes.filter(d => d.rating === grade))
+        // debugger
+        update.exit().remove()
+
+        update
+          .enter()
+          .append("circle")
+          .attr("class", "datapoint")
+          .attr("cx", function (d) {
+            return mymap.latLngToLayerPoint([d.latitude, d.longitude]).x;
+          })
+          .attr("cy", function (d) {
+            return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y;
+          })
+          .attr("r", 10)
+          .style("fill", function (d) {
+            return color(d.type);
+          })
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)
+          .attr("fill-opacity", 0.2)
+          .on("click", onClick);
+      }
+
 
       d3.select("#mapid")
         .select("svg")
@@ -158,7 +140,6 @@ function svgCords(cords = mymap.getCenter()) {
   );
 }
 
-//update map on move
 function update() {
   d3.selectAll("circle")
     .attr("cx", function (d) {
@@ -167,14 +148,15 @@ function update() {
     .attr("cy", function (d) {
       return mymap.latLngToLayerPoint([d.latitude, d.longitude]).y;
     });
-  // mymap.removeLayer("circle")
   d3.selectAll('circle').data([]).exit().remove()
   changeCords()
 }
 
 function changeCords() {
   var cords = mymap.getCenter();
+  // debugger
   svgCords(cords);
+  // mymap.flyTo([cords.lat, cords.lng])
 }
 
 

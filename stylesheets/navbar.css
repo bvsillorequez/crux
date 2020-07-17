@@ -20,6 +20,11 @@
   padding: 10px;
 }
 
+.logo > a {
+  text-decoration: none;
+  color: white;
+}
+
 .social {
   display: flex;
   flex-direction: row;

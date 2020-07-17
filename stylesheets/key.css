@@ -1,0 +1,15 @@
+.parent {
+  position: relative;
+}
+#key {
+  position:absolute;
+  left:5px;
+  bottom: -100px;
+  height: 100px;
+  width: 150px;
+  z-index: 1000;
+  padding: 10px;
+  background-color: white;
+
+}
+
