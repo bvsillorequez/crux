@@ -11,10 +11,11 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 //Add svg with data
 L.svg({ clickable: true }).addTo(mymap);
 
-
-
 function svgCords(cords = mymap.getCenter()) {
-  
+  var elements = document.getElementsByTagName('select');
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].selectedIndex = 0;
+  }
   d3.json(
     // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
     "src/yosemite.json",

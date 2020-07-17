@@ -16,6 +16,7 @@ let onChange = function() {
   let array = cord.split(",")
   c = ({lat: Number(array[0]), lng: Number(array[1]), zoom: Number(array[2])})
   mymap.setView([c.lat, c.lng], c.zoom);
+  
 } 
 
 let npdropdown = document.querySelector('.dropdown')
