@@ -26,7 +26,7 @@ function svgCords(cords = mymap.getCenter()) {
 
 
       let onClick = function (d) {
-        let circle = L.circle([d.latitude, d.longitude], 40, {
+        let circle = L.circle([d.latitude, d.longitude], 100, {
           color: 'none',
           fillColor: 'white',
           fillOpacity: 0
