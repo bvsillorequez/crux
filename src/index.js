@@ -1,6 +1,5 @@
 var mymap = L.map("mapid").setView([37.840548, -119.5165878], 10);
 
-//Map
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution:
     'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
@@ -8,22 +7,22 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   minZoom: 10,
 }).addTo(mymap);
 
-//Add svg with data
 L.svg({ clickable: true }).addTo(mymap);
 
 function svgCords(cords = mymap.getCenter()) {
+
   var elements = document.getElementsByTagName('select');
   for (var i = 0; i < elements.length; i++) {
     elements[i].selectedIndex = 0;
   }
+
   d3.json(
-    // `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
-    "src/yosemite.json",
+    `https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=${cords.lat}&lon=${cords.lng}&maxDistance=10&maxResults=50&minDiff=5.6&maxDiff=5.15a&key=200243839-81d7f5a3fe0faee7505eebca1bbee9af`,
     function (data) {
       let color = d3
         .scaleOrdinal()
         .domain(["Trad", "Sport", "Boulder"])
-        .range(["#29526D", "#AA8C39", "#551600"]); //blue trad, yellow sport, red boulder
+        .range(["#29526D", "#AA8C39", "#551600"]);
 
 
       let onClick = function (d) {
@@ -40,6 +39,7 @@ function svgCords(cords = mymap.getCenter()) {
       let onTypeChange = function () {
         let e = document.getElementById("type");
         let dicipline = e.options[e.selectedIndex].value;
+        var elements = document.getElementsByTagName('select');
         render(dicipline)
       };
 
@@ -91,7 +91,6 @@ function svgCords(cords = mymap.getCenter()) {
           .attr("pointer-events", "auto")
           .selectAll("circles")
           .data(data.routes.filter(d => d.rating === grade))
-        // debugger
         update.exit().remove()
 
         update
@@ -155,9 +154,7 @@ function update() {
 
 function changeCords() {
   var cords = mymap.getCenter();
-  // debugger
   svgCords(cords);
-  // mymap.flyTo([cords.lat, cords.lng])
 }
 
 

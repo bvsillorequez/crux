@@ -21,3 +21,5 @@ d3.select("#type")
   .attr("value", function (d) {
     return d;
   });
+
+
