@@ -1,6 +1,6 @@
 # Crux
 
-[![crux.gif](https://s7.gifyu.com/images/crux.gif)](https://gifyu.com/image/QADF)
+![crux.gif](https://s7.gifyu.com/images/crux.gif)
 
 ## Live Site
 
@@ -18,6 +18,8 @@ To use **Crux**, use your mouse to zoom and pan around the map.  The user can
 select the location they want to climb in and upon zooming in, the user can find
 what climbs are in that area along with information on the climb, clicking the 
 marker.
+
+![cruxclick](https://s7.gifyu.com/images/ezgif.com-video-to-gif7d1b37388683b5a6.gif)
 
 ## Technologies Used
 
