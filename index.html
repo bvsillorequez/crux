@@ -46,6 +46,19 @@
     <div class="footer-container">
       <div class="dropdown">
       </div>
+      <button id="modal-btn" onclick="onBtnClick()">Instructions</button>
+      <div class="modal">
+        <div class="modal-content">
+          <span class="close-btn">close</span>
+          <h3>Moving around the map</h3>
+          <p>Pan - Move mouse over map to pan in any direction</p>
+          <p>Zoom - Mouse scroll or use [+] [-] buttons on top left</p>
+          <h3>Selecting a route</h3>
+          <p>To select the route, click once</p>
+          <p>To see route information, click again</p>
+          <p></p>
+        </div>
+      </div>
       <div class="logo">
         <a href="javascript:void(0)" onclick="window.location.reload()">Crux</a>
       </div>
@@ -61,6 +74,25 @@
   <script src="./src/index.js"></script>
   <script src="./src/type.js"></script>
   <script src="./src/grades.js"></script>
+
+  <script>
+    function onBtnClick() {
+      let modalBtn = document.getElementById("modal-btn")
+      let modal = document.querySelector(".modal")
+      let closeBtn = document.querySelector(".close-btn")
+      modalBtn.onclick = function () {
+        modal.style.display = "block"
+      }
+      closeBtn.onclick = function () {
+        modal.style.display = "none"
+      }
+      window.onclick = function (e) {
+        if (e.target == modal) {
+          modal.style.display = "none"
+        }
+      }
+    }
+  </script>
   
 
 </body>
