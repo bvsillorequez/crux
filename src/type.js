@@ -6,7 +6,7 @@ dpselect.id = "type";
 dpdropdown.appendChild(dpselect);
 
 let dpoption = document.createElement("option");
-dpoption.innerHTML = "Dicipline";
+dpoption.innerHTML = "Discipline";
 dpoption.value = "null";
 dpselect.appendChild(dpoption);
 
