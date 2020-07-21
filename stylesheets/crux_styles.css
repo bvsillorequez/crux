@@ -105,7 +105,7 @@ table {
   /* border: 1px solid black; */
 }
 
-select {
+select, #modal-btn {
   font-family: 'Roboto Slab';
   font-size: 16px;
   font-weight: lighter;
@@ -116,6 +116,7 @@ select {
   color: white;
   margin-left: 10px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 select > option {
@@ -170,14 +171,54 @@ select > option {
 
 .red {
   background-color: #551600;
+  opacity: 0.7;
 }
 
 .blue {
   background-color: #29526D;
+  opacity: 0.7;
 }
 
 .yellow {
   background-color: #AA8C39;
+  opacity: 0.7;
 }
 
+.modal {
+  display: none;
+  position: fixed; 
+  left: 245px; 
+  bottom: 80px;
+}
 
+.modal-content {
+  position: relative; 
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px; 
+  margin: auto;
+  opacity: 0.8;
+  font-family: 'Roboto Slab';
+  animation-name: animatebottom;
+  animation-duration: 0.4s
+}
+
+.modal-content h3{
+  font-size: 24px;
+  font-weight: 600;
+}
+.close-btn {
+  float: right; 
+  color: lightgray; 
+  font-size: 24px;  
+  font-weight: bold;
+  cursor: pointer;
+}
+.close-btn:hover {
+  color: darkgray;
+}
+
+@keyframes animatebottom {
+  from {bottom:-300px; opacity:0}
+  to {bottom:0; opacity:1}
+}
